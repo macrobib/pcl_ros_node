@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ros/ros.h>
 #include "pcl_ros_node.h"
+#include "pcl_passthrough.h"
 
 enum version:int32_t{
     ePASSTHROUGH,
@@ -13,21 +14,27 @@ enum version:int32_t{
     eNDT
 };
 
+void pointCallback(const sensor_msgs::PointCloud2ConstPtr& msg){
+
+}
+
 int main(int argc, char* argv[]){
 
-    int32_t param_impl;
-    ros::init();
-    ros::NodeHandle nh_;
+    int32_t param_impl = 0;
+    ros::init(argc, argv, "pcl_ros_node");
 
-    nh_.param("impl_option", param_impl, 0);
+    ros::NodeHandle nh_;
+    PassThroughFilter ps_filter(nh_);
+    /* nh_.subscribe("/velodyne_points", 1, &pointCallback); */
 
     switch(param_impl){
         case ePASSTHROUGH:
-            ps_filter = PassThroughFilter(nh_);
+            {
+                ps_filter.RosInit();
+                ps_filter.Run();
+            }
             break;
-
         default:
             break;
     }
-    ros::spin();
 }
