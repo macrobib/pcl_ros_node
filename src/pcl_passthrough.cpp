@@ -11,7 +11,7 @@
 
 #include "pcl_passthrough.h"
 
-PassThroughFilter::PassThroughFilter(ros::NodeHandle& nh){
+PassThroughFilter::PassThroughFilter(ros::NodeHandle& nh):private_nh_(nh){
 }
 
 PassThroughFilter::~PassThroughFilter(){
@@ -19,13 +19,12 @@ PassThroughFilter::~PassThroughFilter(){
 
 void PassThroughFilter::RosInit(){
 
-    ros::NodeHandle nh("~");
-    ros::Subscriber sb = nh.subscribe("/velodyne_points", 1, &PassThroughFilter::CloudCallback, this);
-    nh_.subscribe("/vehicle/imu/data_raw", 1, &PassThroughFilter::ImuCallback, this);
-    points_pub_        = nh.advertise<visualization_msgs::Marker>("point_marker", 10);
-    line_list_pub_     = nh.advertise<visualization_msgs::Marker>("line_list_marker", 10);
-    line_strip_pub_    = nh.advertise<visualization_msgs::Marker>("line_strip_marker", 10);
-    ds_pub_ = nh_.advertise<sensor_msgs::PointCloud2>("downsampled_points", 10);
+    vel_sub_           = private_nh_.subscribe("/velodyne_points", 1, &PassThroughFilter::CloudCallback, this);
+    imu_sub_           = private_nh_.subscribe("/vehicle/imu/data_raw", 1, &PassThroughFilter::ImuCallback, this);
+    points_pub_        = private_nh_.advertise<visualization_msgs::Marker>("point_marker", 10);
+    line_list_pub_     = private_nh_.advertise<visualization_msgs::Marker>("line_list_marker", 10);
+    line_strip_pub_    = private_nh_.advertise<visualization_msgs::Marker>("line_strip_marker", 10);
+    ds_pub_            = private_nh_.advertise<sensor_msgs::PointCloud2>("downsampled_points", 10);
 }
 
 void PassThroughFilter::ImuCallback(const sensor_msgs::ImuConstPtr& msg){

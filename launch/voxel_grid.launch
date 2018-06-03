@@ -1,0 +1,16 @@
+<launch>
+    <arg name="bag_file" default="/home/bibin/Documents/dataset/udacity/udacity_drive/2016-11-07-16-06-18.bag" />
+    <arg name="velodyne_config" default="/home/bibin/catkin_ws/src/velodyne/velodyne_pointcloud/params/VLP16db.yaml"/>
+    <arg name="rviz_config" default="/home/bibin/.rviz/pcl.rviz" />
+
+    <!-- Start nodelet manager -->
+    <include file="$(find velodyne_driver)/launch/nodelet_manager.launch" />
+    <include file="$(find velodyne_pointcloud)/launch/cloud_nodelet.launch">
+        <arg name="calibration" value="$(arg velodyne_config)"/>
+    </include>
+
+    <node name="voxel_filter" pkg="pcl_ros_node" type="pcl_voxel_node" output="screen" />
+    <node name="bag_player" pkg="rosbag" type="play" output="screen" args="--clock $(arg bag_file) --pause" />
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="$(arg rviz_config)" />
+
+</launch>

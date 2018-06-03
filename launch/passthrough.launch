@@ -1,6 +1,6 @@
 <launch>
-    <arg name="bag_file" default="/home/erian/Documents/dataset/udacity/udacity-drive/2016-11-07-17-34-27.bag"/>
-    <arg name="velodyne_config" default="/opt/ros/apm/volvofmx/install/share/velodyne_pointcloud/params/VLP16db.yaml"/>
+    <arg name="bag_file" default="/home/bibin/Documents/dataset/udacity/udacity_drive/2016-11-07-17-34-27.bag"/>
+    <arg name="velodyne_config" default="/home/bibin/catkin_ws/src/velodyne/velodyne_pointcloud/params/VLP16db.yaml"/>
     <arg name="rviz_config" default="-d /home/erian/.rviz/pcl.rviz" />
 
       <!-- start nodelet manager and driver nodelets -->

@@ -12,11 +12,14 @@
 
 class PassThroughFilter{
 
-    ros::NodeHandle nh_;
+    ros::NodeHandle private_nh_;
     ros::Publisher points_pub_;
     ros::Publisher line_strip_pub_;
     ros::Publisher line_list_pub_;
     ros::Publisher ds_pub_;
+
+    ros::Subscriber vel_sub_, imu_sub_;
+
     float f = 0.0f;
     
     void FilterCloud(pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud,

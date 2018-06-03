@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
     int32_t param_impl = 0;
     ros::init(argc, argv, "pcl_ros_node");
 
-    ros::NodeHandle nh_;
+    ros::NodeHandle nh_("~");
     PassThroughFilter ps_filter(nh_);
     /* nh_.subscribe("/velodyne_points", 1, &pointCallback); */
 
@@ -31,10 +31,11 @@ int main(int argc, char* argv[]){
         case ePASSTHROUGH:
             {
                 ps_filter.RosInit();
-                ps_filter.Run();
             }
             break;
         default:
             break;
     }
+
+    ros::spin();
 }
