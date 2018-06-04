@@ -2,7 +2,7 @@
 #include "ros_config_structs.h"
 
 
-connectionManager::connectionManager(const QUrl &url, QObject *parent = 0):QObject(parent)
+connectionManager::connectionManager(const QUrl &url, QObject *parent):QObject(parent)
 {
 
 }

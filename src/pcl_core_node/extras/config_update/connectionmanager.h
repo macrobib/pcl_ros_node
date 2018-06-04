@@ -12,9 +12,22 @@ class connectionManager: public QObject
 {
 
 public:
-    connectionManager(const QUrl &url, QObject *parent);
+    connectionManager(const QUrl &url, QObject *parent = nullptr);
     ~connectionManager();
     void sendData();
+
+Q_SIGNALS:
+    void closed();
+
+private Q_SLOTS:
+    void onNewConnection();
+    void processTextMessage(QString message);
+    void processBinaryMessage(QByteArray message);
+    void socketDisconnected();
+
+private:
+    QWebSocketServer*
+
 };
 
 #endif // CONNECTIONMANAGER_H
