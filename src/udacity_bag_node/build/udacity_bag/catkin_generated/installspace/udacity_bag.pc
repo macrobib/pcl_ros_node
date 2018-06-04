@@ -1,0 +1,8 @@
+prefix=/home/erian/Documents/dataset/udacity/udacity-drive/udacity_bag_node/install
+
+Name: udacity_bag
+Description: Description of udacity_bag
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/erian/Documents/dataset/udacity/udacity-drive/udacity_bag_node/install/lib 
+Requires: 
