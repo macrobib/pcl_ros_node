@@ -4,6 +4,7 @@
 #include <QtWebSockets/QWebSocket>
 #include <QtWebSockets/QWebSocketServer>
 #include <QCoreApplication>
+#include <vector>
 
 QT_USE_NAMESPACE
 
@@ -12,7 +13,7 @@ class connectionManager: public QObject
 {
 
 public:
-    connectionManager(const QUrl &url, QObject *parent = nullptr);
+    connectionManager(const QUrl &url, quint16 port, QObject *parent = nullptr);
     ~connectionManager();
     void sendData();
 
@@ -24,10 +25,14 @@ private Q_SLOTS:
     void processTextMessage(QString message);
     void processBinaryMessage(QByteArray message);
     void socketDisconnected();
+    const bool getConnectionStatus() const;
 
 private:
-    QWebSocketServer*
-
+    QWebSocketServer* pWebSocketServer_;
+    std::vector<QWebSocket* > clients_;
+    QUrl url_;
+    bool debug_enabled_;
+    bool connection_status_;
 };
 
 #endif // CONNECTIONMANAGER_H
