@@ -18,7 +18,7 @@ void ConnectionManager::StartServer()
 
 void ConnectionManager::ThreadCallback()
 {
-    h_.onMessage([&](uWS::WebSocket<uWS::CLIENT>*ws, char* message, size_t length, uWS::OpCode opCode){
+    h_.onMessage([this](uWS::WebSocket<uWS::CLIENT>*ws, char* message, size_t length, uWS::OpCode opCode){
                 ROS_INFO_STREAM("Configuration message received.");  
                 
             });
@@ -26,7 +26,7 @@ void ConnectionManager::ThreadCallback()
                 ROS_INFO_STREAM("Connection to the configuration gui lost, exiting.");
                 return;
             });
-
+    h_.connect("ws://127.0.0.1:7000", (void *) 10, {}, 60000);
     h_.run();
     ROS_INFO_STREAM("Exiting the event handler thread.");
 }

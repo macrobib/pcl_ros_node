@@ -5,6 +5,7 @@
 
 #include "callbackhandler.h"
 #include "objecthandler.h"
+#include "connectionmanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +26,9 @@ int main(int argc, char *argv[])
     if(!rootObject)
         return -1;
 
+    QUrl url("127.0.0.1");
     objectHandler handler_(rootObject);
+    connectionManager conman(url);
 
 
     return app.exec();

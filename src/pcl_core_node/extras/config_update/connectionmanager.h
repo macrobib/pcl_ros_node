@@ -13,7 +13,7 @@ class connectionManager: public QObject
 {
 
 public:
-    connectionManager(const QUrl &url, quint16 port, QObject *parent = nullptr);
+    connectionManager(const QUrl &url, quint16 port = 6000, QObject *parent = nullptr);
     ~connectionManager();
     void sendData();
 
