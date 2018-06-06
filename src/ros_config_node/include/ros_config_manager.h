@@ -23,18 +23,28 @@ class ConnectionManager{
     std::unordered_map<int32_t, ros::Publisher*> publishers_;
     
 
-    void StartServer();
     ros::Publisher pub1_, pub2_, pub3_, pub4_, pub5_;
     ros::NodeHandle nh_;
 
     std::string pass_topic_, voxel_topic_, stat_topic_, proj_topic_, cond_outlier_topic_, rad_outlier_topic_, icp_topic_, ransac_topic_, ndt_topic_;
+
+    void HandlePassthroughParam(struct PassthroughArgs& arg);
+    void HandleVoxelFilterParam(struct VoxelFilterArgs& arg);
+    void HandleStatOutlierParam(struct StatOutlierArgs& arg);
+    void HandleParamProjection(struct  ParamProjArgs& arg);
+    void HandleCondOutlierParam(struct CondOutlierArgs& arg);
+    void HandleRadOutlierParam(struct  RadOutlierArgs& arg);
+    void HandleIcpParam(struct ICPArgs& arg);
+    void HandleRansacParam(struct RansacArgs& arg);
+    void HandleNdtParam(struct NdtArgs& arg);
 
 public:
     ConnectionManager(std::string url, ros::NodeHandle& nh);
     ~ConnectionManager();
     void InitPublishers();
     void ThreadCallback();
-    void ReadActiveData();
+    void ReadActiveData(char* data);
+    void StartServer();
 };
 
 #endif /*CONFIG_MANAGER_H*/

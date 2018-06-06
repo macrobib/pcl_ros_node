@@ -1,9 +1,12 @@
 #include "ros_config_manager.h"
 #include <std_msgs/Float64MultiArray.h>
+#include <csignal>
+#include <iostream>
 
 ConnectionManager::ConnectionManager(std::string url, ros::NodeHandle& nh):url_(url), nh_(nh), event_handler_()
 {
     InitPublishers();
+    ROS_INFO_STREAM("Create connection manager object.");
 }
 
 ConnectionManager::~ConnectionManager()
@@ -19,20 +22,88 @@ void ConnectionManager::StartServer()
 void ConnectionManager::ThreadCallback()
 {
     h_.onMessage([this](uWS::WebSocket<uWS::CLIENT>*ws, char* message, size_t length, uWS::OpCode opCode){
-                ROS_INFO_STREAM("Configuration message received.");  
                 
+                ROS_INFO_STREAM("Configuration message received of length.:-- "<< length); 
+                ReadActiveData(message);
             });
     h_.onDisconnection([](uWS::WebSocket<uWS::CLIENT> *ws, int code, char *message, size_t length){
                 ROS_INFO_STREAM("Connection to the configuration gui lost, exiting.");
                 return;
             });
+
+    ROS_INFO_STREAM("Starting connection on local stream.");
     h_.connect("ws://127.0.0.1:7000", (void *) 10, {}, 60000);
     h_.run();
     ROS_INFO_STREAM("Exiting the event handler thread.");
+    std::raise(SIGINT);
 }
 
-void ConnectionManager::ReadActiveData()
+
+void ConnectionManager::HandlePassthroughParam(struct PassthroughArgs& arg){
+    
+    ROS_INFO_STREAM("passthrough config: [%f] -- [%f] "<< arg.min_z << arg.max_z);
+}
+
+void ConnectionManager::HandleVoxelFilterParam(struct VoxelFilterArgs& arg){
+
+}
+
+void ConnectionManager::HandleParamProjection(struct ParamProjArgs& arg){
+
+}
+
+void ConnectionManager::HandleStatOutlierParam(struct StatOutlierArgs& arg){
+
+}
+
+void ConnectionManager::HandleCondOutlierParam(struct CondOutlierArgs& arg){
+
+}
+
+void ConnectionManager::HandleRadOutlierParam(struct RadOutlierArgs& arg){
+
+}
+
+void ConnectionManager::HandleIcpParam(struct ICPArgs& arg){
+
+}
+
+void ConnectionManager::HandleRansacParam(struct RansacArgs& arg){
+
+}
+
+void ConnectionManager::HandleNdtParam(struct NdtArgs& arg){
+
+}
+
+void ConnectionManager::ReadActiveData(char* data)
 {
+    struct CommonMessage* pMessage = reinterpret_cast<CommonMessage* >(data);
+    ROS_INFO_STREAM("Message type: "<< pMessage->type);
+    switch(pMessage->type){
+        case ePASSTHROUGH:
+            HandlePassthroughParam(pMessage->data.ps);
+            break;
+        case eVOXELFILTER:
+            break;
+        case eSTATOUTLIER:
+            break;
+        case ePARAMPROJECTION:
+            break;
+        case eCONDOUTLIER:
+            break;
+        case eRADOUTLIER:
+            break;
+        case eICP:
+            break;
+        case eRANSAC:
+            break;
+        case eNDT:
+            break;
+        default:
+            ROS_INFO_STREAM("Unknown output stream received.");
+    }
+
 
 }
 

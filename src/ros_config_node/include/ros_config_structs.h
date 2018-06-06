@@ -18,7 +18,8 @@ enum MessageType
 
 struct PassthroughArgs
 {
-
+    double min_z;
+    double max_z;
 };
 
 struct VoxelFilterArgs
@@ -61,21 +62,23 @@ struct NdtArgs
 
 };
 
+typedef union payload_data
+{
+    struct PassthroughArgs ps;
+    struct VoxelFilterArgs vf;
+    struct StatOutlierArgs so;
+    struct ParamProjArgs pp;
+    struct CondOutlierArgs co;
+    struct RadOutlierArgs ro;
+    struct ICPArgs icp;
+    struct RansacArgs ransac;
+    struct NdtArgs ndt;
+}payload;
+
 struct CommonMessage
 {
     MessageType type;
-    union payload
-    {
-        struct PassthroughArgs ps;
-        struct VoxelFilterArgs vf;
-        struct StatOutlierArgs so;
-        struct ParamProjArgs pp;
-        struct CondOutlierArgs co;
-        struct RadOutlierArgs ro;
-        struct ICPArgs icp;
-        struct RansacArgs ransac;
-        struct NdtArgs ndt;
-    };
+    payload data;
 };
 
 #endif /*ROS_CONFIG_STRUCT_*/

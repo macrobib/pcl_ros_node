@@ -1,6 +1,7 @@
 #include "connectionmanager.h"
 #include "ros_config_structs.h"
 #include <QDebug>
+#include <cstring>
 
 
 connectionManager::connectionManager(const QUrl &url, quint16 port, QObject *parent):
@@ -27,6 +28,19 @@ void connectionManager::onNewConnection(){
     connect(pSocket, &QWebSocket::textFrameReceived, this, &connectionManager::processTextMessage);
     connect(pSocket, &QWebSocket::binaryFrameReceived, this, &connectionManager::processBinaryMessage);
     connect(pSocket, &QWebSocket::disconnected, this, &connectionManager::socketDisconnected);
+
+    struct CommonMessage data;
+    data.type = ePASSTHROUGH;
+    data.data.ps.min_z = 1.00;
+    data.data.ps.max_z = 2.00;
+
+    char* data_array = new char[sizeof(data)];
+    std::memset(data_array, 0, sizeof data);
+    std::memcpy(data_array,(char*)&data, sizeof data);
+    if(debug_enabled_)
+      qDebug() << "Data written of size: " << sizeof data;
+//    QByteArray payload(reinterpret_cast<char*>(data));
+    pSocket->sendBinaryMessage(data_array);
     clients_.push_back(pSocket);
 
 }
